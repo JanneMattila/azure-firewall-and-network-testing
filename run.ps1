@@ -171,11 +171,11 @@ $queryResult.Results | Format-Table
 #       |_| 
 ##################################################################################
 
-# Azure Kubernetes Service (AKS)
+# Private Azure Kubernetes Service (AKS) rule deployment
 New-AzResourceGroupDeployment `
     -DeploymentName "AKS-$((Get-Date).ToString("yyyy-MM-dd-HH-mm-ss"))" `
     -ResourceGroupName $resourceGroupName `
-    -TemplateFile .\workloads\aks\firewall-policy-aks.bicep `
+    -TemplateFile .\workloads\private-aks\firewall-policy.bicep `
     -Force `
     -Verbose
 

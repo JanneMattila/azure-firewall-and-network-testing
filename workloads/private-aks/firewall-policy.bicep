@@ -57,6 +57,26 @@ resource ruleCollectionGroup 'Microsoft.Network/firewallPolicies/ruleCollectionG
               '*.data.mcr.microsoft.com'
             ]
           }
+          {
+            ruleType: 'ApplicationRule'
+            name: 'Allow monitoring'
+            description: 'For more details see: https://aka.ms/aks-required-ports-and-addresses and https://learn.microsoft.com/en-us/azure/aks/outbound-rules-control-egress#azure-monitor-for-containers'
+            sourceAddresses: [
+              '*'
+            ]
+            protocols: [
+              {
+                port: 443
+                protocolType: 'Https'
+              }
+            ]
+            targetFqdns: [
+              'dc.services.visualstudio.com'
+              '*.ods.opinsights.azure.com'
+              '*.oms.opinsights.azure.com'
+              '*.monitoring.azure.com'
+            ]
+          }
         ]
       }
     ]

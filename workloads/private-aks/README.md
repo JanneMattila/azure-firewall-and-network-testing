@@ -1,8 +1,6 @@
-# AKS
-
+# Private AKS
 
 [Azure Global required FQDN / application rules](https://learn.microsoft.com/en-us/azure/aks/outbound-rules-control-egress#azure-global-required-fqdn--application-rules)
-
 
 ## No connectivity
 
@@ -48,8 +46,8 @@ $WorkspaceName = "log-firewall"
 $ResourceGroupName = "rg-azure-firewall-and-network-testing"
 
 $query = "AZFWApplicationRule
-| where SourceIp startswith '10.10.' |
-| s--------------------------------" |
+| where SourceIp startswith "10.10."
+| summarize count() by Protocol, DestinationPort, Fqdn"
 $query
 $workspace = Get-AzOperationalInsightsWorkspace -Name $WorkspaceName -ResourceGroupName $ResourceGroupName
 
@@ -117,3 +115,26 @@ AZFWApplicationRule
 ## Monitoring and logging endpoints allowed
 
 The following is the Application Rule that is required to access monitoring and logging endpoints.
+
+```bicep
+{
+  ruleType: 'ApplicationRule'
+  name: 'Allow monitoring'
+  description: 'For more details see: https://aka.ms/aks-required-ports-and-addresses and https://learn.microsoft.com/en-us/azure/aks/outbound-rules-control-egress#azure-monitor-for-containers'
+  sourceAddresses: [
+    '*'
+  ]
+  protocols: [
+    {
+      port: 443
+      protocolType: 'Https'
+    }
+  ]
+  targetFqdns: [
+    'dc.services.visualstudio.com'
+    '*.ods.opinsights.azure.com'
+    '*.oms.opinsights.azure.com'
+    '*.monitoring.azure.com'
+  ]
+}
+```
