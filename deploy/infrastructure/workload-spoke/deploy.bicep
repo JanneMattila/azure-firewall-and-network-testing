@@ -14,7 +14,7 @@ var bastionName = 'bas-management'
 var vnetAddressSpace = '${addressSpacePrefix}.0.0/16'
 
 resource spokeRouteTable 'Microsoft.Network/routeTables@2020-11-01' = {
-  name: 'rt-${spokeName}-front'
+  name: 'rt-${spokeName}-1'
   location: location
   properties: {
     disableBgpRoutePropagation: true
@@ -22,10 +22,33 @@ resource spokeRouteTable 'Microsoft.Network/routeTables@2020-11-01' = {
       {
         name: 'All'
         properties: {
-          addressPrefix: vnetAddressSpace
+          addressPrefix: '0.0.0.0/0'
           nextHopType: 'VirtualAppliance'
           nextHopIpAddress: firewallIpAddress
           hasBgpOverride: false
+        }
+      }
+    ]
+  }
+}
+
+resource networkSecurityGroup 'Microsoft.Network/networkSecurityGroups@2022-11-01' = {
+  name: 'nsg-${spokeName}-1'
+  location: location
+  properties: {
+    securityRules: [
+      {
+        name: 'allowAllRule'
+        properties: {
+          description: 'Allow all traffic'
+          protocol: '*'
+          sourcePortRange: '*'
+          destinationPortRange: '*'
+          sourceAddressPrefix: '*'
+          destinationAddressPrefix: '*'
+          access: 'Allow'
+          priority: 100
+          direction: 'Inbound'
         }
       }
     ]
@@ -64,6 +87,9 @@ resource virtualNetwork 'Microsoft.Network/virtualNetworks@2022-11-01' = {
           addressPrefix: '${addressSpacePrefix}.2.0/24'
           routeTable: {
             id: spokeRouteTable.id
+          }
+          networkSecurityGroup: {
+            id: networkSecurityGroup.id
           }
         }
       }
