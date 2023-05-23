@@ -4,16 +4,12 @@
 #   / _ \  |_  / | |_  \ \ /\ / /
 #  / ___ \  / /  |  _|  \ V  V /
 # /_/   \_\/___| |_|     \_/\_/
-# demo script
+# and network testing script
 ##################################
 
 # Remember to update you Azure Az PowerShell module!
 # https://docs.microsoft.com/en-us/powershell/azure/install-az-ps?view=azps-7.0.0
 Update-Module Az
-
-# Remember to install Bicep!
-# https://docs.microsoft.com/en-us/azure/azure-resource-manager/bicep/install#azure-powershell
-bicep --version # 0.4.1124 or newer
 
 # Login to Azure
 Login-AzAccount
@@ -25,6 +21,7 @@ Select-AzSubscription -Subscription "<YourSubscriptionName>"
 Set-Location .\deploy\
 # To understand the demo structure better, see tree of directories
 tree
+
 $username = "jumpboxuser"
 $plainTextPassword = (New-Guid).ToString() + (New-Guid).ToString().ToUpper()
 $plainTextPassword
@@ -76,10 +73,13 @@ $username | clip
 $plainTextPassword
 $plainTextPassword | clip
 
-# Connect to a VM using Bastion and the native client on your Windows computer (Preview)
-# https://docs.microsoft.com/en-us/azure/bastion/connect-native-client-windows
+# Connect to a VM using a native client
+# https://learn.microsoft.com/en-us/azure/bastion/connect-native-client-windows
 az login -o none
+
 az extension add --upgrade --yes --name ssh
+az extension add --upgrade --yes --name bastion
+
 az network bastion ssh `
     --name $bastion `
     --resource-group $resourceGroupName `

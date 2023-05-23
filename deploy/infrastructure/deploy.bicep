@@ -16,26 +16,6 @@ var spokes = [
   }
 ]
 
-// All route tables are defined here
-resource hubGatewaySubnetRouteTable 'Microsoft.Network/routeTables@2020-11-01' = {
-  name: 'rt-${hubName}-gateway'
-  location: location
-  properties: {
-    disableBgpRoutePropagation: false
-    routes: [
-      {
-        name: spokes[0].name
-        properties: {
-          addressPrefix: spokes[0].vnetAddressSpace
-          nextHopType: 'VirtualAppliance'
-          nextHopIpAddress: firewallIpAddress
-          hasBgpOverride: false
-        }
-      }
-    ]
-  }
-}
-
 resource spoke1RouteTable 'Microsoft.Network/routeTables@2020-11-01' = {
   name: 'rt-${spokes[0].name}-front'
   location: location
