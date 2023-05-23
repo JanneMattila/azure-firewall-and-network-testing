@@ -139,6 +139,26 @@ exit
 # https://docs.microsoft.com/en-us/powershell/module/az.compute/get-azvmruncommand?view=azps-7.0.0
 # Get-AzVMRunCommand
 
+######################
+#  _  _____  _
+# | |/ / _ \| |
+# | ' / | | | |
+# | . \ |_| | |___
+# |_|\_\__\_\_____|
+# 
+######################
+
+$WorkspaceName = "log-firewall"
+
+$query = "AZFWApplicationRule
+| where SourceIp startswith '10.10.'
+| summarize count() by Protocol, DestinationPort, Fqdn"
+$query
+$workspace = Get-AzOperationalInsightsWorkspace -Name $WorkspaceName -ResourceGroupName $resourceGroupName
+
+$queryResult = Invoke-AzOperationalInsightsQuery -Workspace $workspace -Query $query
+$queryResult.Results | Format-Table
+
 ##################################
 #   ____ _
 #  / ___| | ___  __ _ _ __

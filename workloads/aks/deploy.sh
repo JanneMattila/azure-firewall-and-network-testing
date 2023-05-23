@@ -82,7 +82,6 @@ workload_aks_server_json=$(az aks create -g $resource_group_name -n $workload_ak
  --node-osdisk-type Ephemeral \
  --enable-private-cluster \
  --private-dns-zone None \
- --max-pods 50 --network-plugin azure \
  --kubernetes-version 1.25.5 \
  --enable-addons monitoring \
  --enable-aad \
