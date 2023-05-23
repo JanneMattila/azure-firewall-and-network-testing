@@ -1,9 +1,4 @@
-param name string
-@allowed([
-  'Premium'
-  'Standard'
-])
-param tier string = 'Standard'
+param name string = 'afwp-hub'
 param location string = resourceGroup().location
 
 resource firewallPolicy 'Microsoft.Network/firewallPolicies@2021-05-01' = {
@@ -11,7 +6,7 @@ resource firewallPolicy 'Microsoft.Network/firewallPolicies@2021-05-01' = {
   location: location
   properties: {
     sku: {
-      tier: tier
+      tier: 'Standard'
     }
     threatIntelMode: 'Deny'
     dnsSettings: {

@@ -1,6 +1,10 @@
 # AKS
 
-# No connectivity
+
+[Azure Global required FQDN / application rules](https://learn.microsoft.com/en-us/azure/aks/outbound-rules-control-egress#azure-global-required-fqdn--application-rules)
+
+
+## No connectivity
 
 User Defined Route (UDR) implemented in AKS subnet to route all traffic to Azure Firewall in a hub VNET.
 
@@ -44,8 +48,8 @@ $WorkspaceName = "log-firewall"
 $ResourceGroupName = "rg-azure-firewall-and-network-testing"
 
 $query = "AZFWApplicationRule
-| where SourceIp startswith '10.10.'
-| summarize count() by Protocol, DestinationPort, Fqdn"
+| where SourceIp startswith '10.10.' |
+| s--------------------------------" |
 $query
 $workspace = Get-AzOperationalInsightsWorkspace -Name $WorkspaceName -ResourceGroupName $ResourceGroupName
 
@@ -54,3 +58,58 @@ $queryResult.Results | Format-Table
 ```
 
 ![KQL query output](https://github.com/JanneMattila/azure-firewall-and-network-testing/assets/2357647/096ee002-b3f8-4e16-9dd7-cdf86a0713c2)
+
+## "mcr.microsoft.com" allowed
+
+The following is the Application Rule that is required to access images in Microsoft Container Registry (MCR).
+
+`mcr.microsoft.com`:
+
+> Required to access images in Microsoft Container Registry (MCR). This registry contains first-party images/charts (for example, coreDNS, etc.). 
+> These images are required for the correct creation and functioning of the cluster, including scale and upgrade operations.
+
+`*.data.mcr.microsoft.com`:
+
+> Required for MCR storage backed by the Azure content delivery network (CDN).
+
+```bicep
+{
+  ruleType: 'ApplicationRule'
+  name: 'Allow container images from mcr.microsoft.com'
+  description: 'For more details see: https://aka.ms/aks-required-ports-and-addresses and https://learn.microsoft.com/en-us/azure/aks/outbound-rules-control-egress#azure-global-required-fqdn--application-rules'
+  sourceAddresses: [
+    '*'
+  ]
+  protocols: [
+    {
+      port: 443
+      protocolType: 'Https'
+    }
+  ]
+  taretFqdns: [
+    'mcr.microsoft.com'
+    '*.data.mcr.microsoft.com'
+  ]
+}
+```
+
+```kql
+AZFWApplicationRule
+| where SourceIp startswith '10.10.' and Action == 'Deny'
+| summarize count() by Protocol, DestinationPort, Fqdn
+| order by count_
+```
+
+| Protocol | DestinationPort | Fqdn                                                          | count_ |
+| -------- | --------------- | ------------------------------------------------------------- | ------ |
+| HTTPS    | 443             | 38c1758a-197e-44fc-83f8-31bb7619a8bc.ods.opinsights.azure.com | 423    |
+| HTTPS    | 443             | dc.services.visualstudio.com                                  | 158    |
+| HTTPS    | 443             | northeurope.monitoring.azure.com                              | 44     |
+| HTTPS    | 443             | md-hdd-b4rzwnpfspxt.z38.blob.storage.azure.net                | 12     |
+| HTTPS    | 443             | 38c1758a-197e-44fc-83f8-31bb7619a8bc.oms.opinsights.azure.com | 11     |
+| HTTPS    | 443             | esm.ubuntu.com                                                | 8      |
+| HTTPS    | 443             | packages.microsoft.com                                        | 8      |
+| HTTPS    | 443             | umsanpnjwjtt1kbrqrqj.blob.core.windows.net                    | 6      |
+| HTTPS    | 443             | data.policy.core.windows.net                                  | 4      |
+| HTTP/1.1 | 80              | azure.archive.ubuntu.com                                      | 4      |
+| HTTPS    | 443             | motd.ubuntu.com                                               | 4      |

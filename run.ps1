@@ -159,6 +159,28 @@ $workspace = Get-AzOperationalInsightsWorkspace -Name $WorkspaceName -ResourceGr
 $queryResult = Invoke-AzOperationalInsightsQuery -Workspace $workspace -Query $query
 $queryResult.Results | Format-Table
 
+##################################################################################
+#     _         _______        __ __        __         _    _                 _
+#    / \    ___|  ___\ \      / / \ \      / /__  _ __| | _| | ___   __ _  __| |
+#   / _ \  |_  / |_   \ \ /\ / /   \ \ /\ / / _ \| '__| |/ / |/ _ \ / _` |/ _` |
+#  / ___ \  / /|  _|   \ V  V /     \ V  V / (_) | |  |   <| | (_) | (_| | (_| |
+# /_/   \_\/___|_|      \_/\_/       \_/\_/ \___/|_|  |_|\_\_|\___/ \__,_|\__,_|
+#  ____                  _  __ _        ____        _
+# / ___| _ __   ___  ___(_)/ _(_) ___  |  _ \ _   _| | ___  ___
+# \___ \| '_ \ / _ \/ __| | |_| |/ __| | |_) | | | | |/ _ \/ __|
+#  ___) | |_) |  __/ (__| |  _| | (__  |  _ <| |_| | |  __/\__ \
+# |____/| .__/ \___|\___|_|_| |_|\___| |_| \_\\__,_|_|\___||___/
+#       |_| 
+##################################################################################
+
+# Azure Kubernetes Service (AKS)
+New-AzResourceGroupDeployment `
+    -DeploymentName "AKS-$((Get-Date).ToString("yyyy-MM-dd-HH-mm-ss"))" `
+    -ResourceGroupName $resourceGroupName `
+    -TemplateFile .\infrastructure\hub\firewall\example-workloads\firewall-policy-aks.bicep `
+    -Force `
+    -Verbose
+
 ##################################
 #   ____ _
 #  / ___| | ___  __ _ _ __

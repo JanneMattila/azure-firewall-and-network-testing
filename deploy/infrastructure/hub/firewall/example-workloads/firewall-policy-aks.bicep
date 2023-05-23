@@ -1,9 +1,4 @@
-param name string
-@allowed([
-  'Premium'
-  'Standard'
-])
-param tier string = 'Standard'
+param name string = 'afwp-hub'
 param location string = resourceGroup().location
 
 resource firewallPolicy 'Microsoft.Network/firewallPolicies@2021-05-01' = {
@@ -11,7 +6,7 @@ resource firewallPolicy 'Microsoft.Network/firewallPolicies@2021-05-01' = {
   location: location
   properties: {
     sku: {
-      tier: tier
+      tier: 'Standard'
     }
     threatIntelMode: 'Deny'
     dnsSettings: {
@@ -43,7 +38,26 @@ resource ruleCollectionGroup 'Microsoft.Network/firewallPolicies/ruleCollectionG
         action: {
           type: 'Allow'
         }
-        rules: []
+        rules: [
+          {
+            ruleType: 'ApplicationRule'
+            name: 'Allow container images from mcr.microsoft.com'
+            description: 'For more details see: https://aka.ms/aks-required-ports-and-addresses and https://learn.microsoft.com/en-us/azure/aks/outbound-rules-control-egress#azure-global-required-fqdn--application-rules'
+            sourceAddresses: [
+              '*'
+            ]
+            protocols: [
+              {
+                port: 443
+                protocolType: 'Https'
+              }
+            ]
+            targetFqdns: [
+              'mcr.microsoft.com'
+              '*.data.mcr.microsoft.com'
+            ]
+          }
+        ]
       }
     ]
   }

@@ -1,16 +1,6 @@
 param firewallPolicyId string
 param ip object
 param name string
-@allowed([
-  'AZFW_Hub'
-  'AZFW_VNet'
-])
-param skuName string = 'AZFW_VNet'
-@allowed([
-  'Premium'
-  'Standard'
-])
-param skuTier string = 'Standard'
 param location string = resourceGroup().location
 
 resource firewall 'Microsoft.Network/azureFirewalls@2020-11-01' = {
@@ -24,8 +14,8 @@ resource firewall 'Microsoft.Network/azureFirewalls@2020-11-01' = {
   properties: {
     threatIntelMode: 'Alert'
     sku: {
-      name: skuName
-      tier: skuTier
+      name: 'AZFW_VNet'
+      tier: 'Standard'
     }
     firewallPolicy: {
       id: firewallPolicyId
