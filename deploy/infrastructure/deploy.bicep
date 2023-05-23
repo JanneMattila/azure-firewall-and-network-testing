@@ -65,9 +65,6 @@ module hub 'hub/deploy.bicep' = {
   name: 'hub-deployment'
   params: {
     name: hubVNetName
-    username: username
-    password: password
-    gatewaySubnetRouteTableId: hubGatewaySubnetRouteTable.id
     location: location
   }
 }
@@ -88,25 +85,27 @@ module spokeDeployments 'other-spokes/deploy.bicep' = [for (spoke, i) in spokes:
   ]
 }]
 
-module workloadClientSpokeDeployments 'workload-spoke/deploy.bicep' = {
-  name: 'workload--client-spoke-deployment'
+module workloadSpokeDeployments 'workload-spoke/deploy.bicep' = {
+  name: 'workload-spoke-deployment'
   params: {
-    spokeName: 'spoke-workload-client'
+    spokeName: 'spoke-workload'
     hubName: hubVNetName
     hubId: hub.outputs.id
     location: location
     firewallIpAddress: firewallIpAddress
     addressSpacePrefix: '10.10'
+    username: username
+    password: password
   }
   dependsOn: [
     hub
   ]
 }
 
-module workloadServerSpokeDeployments 'workload-spoke/deploy.bicep' = {
-  name: 'workload--server-spoke-deployment'
+module workloadOtherSpokeDeployments 'other-workload-spoke/deploy.bicep' = {
+  name: 'other-workload-spoke-deployment'
   params: {
-    spokeName: 'spoke-workload-server'
+    spokeName: 'spoke-other-workload'
     hubName: hubVNetName
     hubId: hub.outputs.id
     location: location
@@ -118,6 +117,6 @@ module workloadServerSpokeDeployments 'workload-spoke/deploy.bicep' = {
   ]
 }
 
+output bastionName string = workloadSpokeDeployments.outputs.bastionName
+output virtualMachineResourceId string = workloadSpokeDeployments.outputs.virtualMachineResourceId
 output firewallSubnetId string = hub.outputs.firewallSubnetId
-output bastionName string = hub.outputs.bastionName
-output virtualMachineResourceId string = hub.outputs.virtualMachineResourceId

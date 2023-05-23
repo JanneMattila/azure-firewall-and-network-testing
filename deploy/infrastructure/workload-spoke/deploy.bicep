@@ -3,15 +3,18 @@ param addressSpacePrefix string
 param hubName string
 param hubId string
 param firewallIpAddress string
+param username string
+@secure()
+param password string
 param location string = resourceGroup().location
 
 var vnetName = 'vnet-${spokeName}'
+var bastionName = 'bas-management'
 
 var vnetAddressSpace = '${addressSpacePrefix}.0.0/16'
-var subnetAddressSpace = '${addressSpacePrefix}.1.0/24'
 
 resource spokeRouteTable 'Microsoft.Network/routeTables@2020-11-01' = {
-  name: 'rt-spokeName-front'
+  name: 'rt-${spokeName}-front'
   location: location
   properties: {
     disableBgpRoutePropagation: true
@@ -19,33 +22,10 @@ resource spokeRouteTable 'Microsoft.Network/routeTables@2020-11-01' = {
       {
         name: 'All'
         properties: {
-          addressPrefix: subnetAddressSpace
+          addressPrefix: vnetAddressSpace
           nextHopType: 'VirtualAppliance'
           nextHopIpAddress: firewallIpAddress
           hasBgpOverride: false
-        }
-      }
-    ]
-  }
-}
-
-resource networkSecurityGroup 'Microsoft.Network/networkSecurityGroups@2022-11-01' = {
-  name: 'nsg-${spokeName}-front'
-  location: location
-  properties: {
-    securityRules: [
-      {
-        name: 'allowAllRule'
-        properties: {
-          description: 'Allow all traffic'
-          protocol: '*'
-          sourcePortRange: '*'
-          destinationPortRange: '*'
-          sourceAddressPrefix: '*'
-          destinationAddressPrefix: '*'
-          access: 'Allow'
-          priority: 100
-          direction: 'Inbound'
         }
       }
     ]
@@ -66,26 +46,69 @@ resource virtualNetwork 'Microsoft.Network/virtualNetworks@2022-11-01' = {
     }
     subnets: [
       {
-        name: 'snet-front'
+        // For our demo management subnet to host our VMs
+        name: 'snet-management'
         properties: {
-          addressPrefix: subnetAddressSpace
+          addressPrefix: '${addressSpacePrefix}.0.0/24'
+        }
+      }
+      {
+        name: 'AzureBastionSubnet'
+        properties: {
+          addressPrefix: '${addressSpacePrefix}.1.0/24'
+        }
+      }
+      {
+        name: 'snet-1'
+        properties: {
+          addressPrefix: '${addressSpacePrefix}.2.0/24'
           routeTable: {
             id: spokeRouteTable.id
           }
-          networkSecurityGroup: {
-            id: networkSecurityGroup.id
+        }
+      }
+      {
+        name: 'snet-2'
+        properties: {
+          addressPrefix: '${addressSpacePrefix}.3.0/24'
+          routeTable: {
+            id: spokeRouteTable.id
           }
-          // delegations: [
-          //   {
-          //     name: 'ACIDelegation'
-          //     properties: {
-          //       serviceName: 'Microsoft.Storage'
-          //     }
-          //   }
-          // ]
+        }
+      }
+      {
+        name: 'snet-3'
+        properties: {
+          addressPrefix: '${addressSpacePrefix}.4.0/24'
+          routeTable: {
+            id: spokeRouteTable.id
+          }
         }
       }
     ]
+  }
+}
+
+var managementSubnetId = virtualNetwork.properties.subnets[0].id
+var bastionSubnetId = virtualNetwork.properties.subnets[1].id
+
+module bastion 'bastion.bicep' = {
+  name: 'bastion-deployment'
+  params: {
+    name: bastionName
+    location: location
+    subnetId: bastionSubnetId
+  }
+}
+
+module jumpbox 'jumpbox.bicep' = {
+  name: 'jumpbox-deployment'
+  params: {
+    name: 'jumpbox'
+    username: username
+    password: password
+    location: location
+    subnetId: managementSubnetId
   }
 }
 
@@ -113,5 +136,5 @@ resource hubToSpokePeering 'Microsoft.Network/virtualNetworks/virtualNetworkPeer
   }
 }
 
-output id string = virtualNetwork.id
-output subnetId string = virtualNetwork.properties.subnets[0].id
+output bastionName string = bastionName
+output virtualMachineResourceId string = jumpbox.outputs.virtualMachineResourceId
