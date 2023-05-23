@@ -86,7 +86,7 @@ The following is the Application Rule that is required to access images in Micro
       protocolType: 'Https'
     }
   ]
-  taretFqdns: [
+  targetFqdns: [
     'mcr.microsoft.com'
     '*.data.mcr.microsoft.com'
   ]
@@ -113,3 +113,7 @@ AZFWApplicationRule
 | HTTPS    | 443             | data.policy.core.windows.net                                  | 4      |
 | HTTP/1.1 | 80              | azure.archive.ubuntu.com                                      | 4      |
 | HTTPS    | 443             | motd.ubuntu.com                                               | 4      |
+
+## Monitoring and logging endpoints allowed
+
+The following is the Application Rule that is required to access monitoring and logging endpoints.

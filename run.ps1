@@ -17,8 +17,6 @@ Login-AzAccount
 # *Explicitly* select your working context
 Select-AzSubscription -Subscription "<YourSubscriptionName>"
 
-# Run deployment
-Set-Location .\deploy\
 # To understand the demo structure better, see tree of directories
 tree
 
@@ -29,11 +27,11 @@ $password = ConvertTo-SecureString -String $plainTextPassword -AsPlainText
 $resourceGroupName = "rg-azure-firewall-and-network-testing"
 
 # Run deployment in single command
-$global:result = .\deploy.ps1 -Username $username -Password $password -ResourceGroupName $resourceGroupName
+$global:result = .\deploy\deploy.ps1 -Username $username -Password $password -ResourceGroupName $resourceGroupName
 
 # Run deployment using multi-line command to print the deployment duration (you need to execute all lines)
 Measure-Command -Expression {
-    $global:result = .\deploy.ps1 `
+    $global:result = .\deploy\deploy.ps1 `
         -Username $username `
         -Password $password `
         -ResourceGroupName $resourceGroupName
@@ -177,7 +175,7 @@ $queryResult.Results | Format-Table
 New-AzResourceGroupDeployment `
     -DeploymentName "AKS-$((Get-Date).ToString("yyyy-MM-dd-HH-mm-ss"))" `
     -ResourceGroupName $resourceGroupName `
-    -TemplateFile .\infrastructure\hub\firewall\example-workloads\firewall-policy-aks.bicep `
+    -TemplateFile .\workloads\aks\firewall-policy-aks.bicep `
     -Force `
     -Verbose
 
