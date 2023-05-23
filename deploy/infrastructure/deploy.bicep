@@ -99,4 +99,4 @@ module workloadOtherSpokeDeployments 'other-workload-spoke/deploy.bicep' = {
 
 output bastionName string = workloadSpokeDeployments.outputs.bastionName
 output virtualMachineResourceId string = workloadSpokeDeployments.outputs.virtualMachineResourceId
-output firewallSubnetId string = hub.outputs.firewallSubnetId
+output firewallPrivateIp string = hub.outputs.firewallPrivateIp

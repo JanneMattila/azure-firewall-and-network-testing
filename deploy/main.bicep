@@ -12,14 +12,6 @@ module infrastructure 'infrastructure/deploy.bicep' = {
   }
 }
 
-module firewall 'firewall/deploy.bicep' = {
-  name: 'firewall-resources-deployment'
-  params: {
-    firewallSubnetId: infrastructure.outputs.firewallSubnetId
-    location: location
-  }
-}
-
-output firewallPrivateIp string = firewall.outputs.firewallPrivateIp
+output firewallPrivateIp string = infrastructure.outputs.firewallPrivateIp
 output bastionName string = infrastructure.outputs.bastionName
 output virtualMachineResourceId string = infrastructure.outputs.virtualMachineResourceId

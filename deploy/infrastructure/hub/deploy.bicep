@@ -21,6 +21,16 @@ resource virtualNetwork 'Microsoft.Network/virtualNetworks@2021-05-01' = {
   }
 }
 
+var firewallSubnetId = virtualNetwork.properties.subnets[0].id
+
+module firewall 'firewall/deploy.bicep' = {
+  name: 'firewall-resources-deployment'
+  params: {
+    firewallSubnetId: firewallSubnetId
+    location: location
+  }
+}
+
 output id string = virtualNetwork.id
 output name string = virtualNetwork.name
-output firewallSubnetId string = virtualNetwork.properties.subnets[0].id
+output firewallPrivateIp string = firewall.outputs.firewallPrivateIp
