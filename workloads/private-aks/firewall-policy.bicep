@@ -77,6 +77,24 @@ resource ruleCollectionGroup 'Microsoft.Network/firewallPolicies/ruleCollectionG
               '*.monitoring.azure.com'
             ]
           }
+          {
+            ruleType: 'ApplicationRule'
+            name: 'Allow Azure Active Directory authentication'
+            description: 'For more details see: https://aka.ms/aks-required-ports-and-addresses and https://learn.microsoft.com/en-us/azure/aks/outbound-rules-control-egress#azure-global-required-fqdn--application-rules'
+            sourceAddresses: [
+              '*'
+            ]
+            protocols: [
+              {
+                port: 443
+                protocolType: 'Https'
+              }
+            ]
+            targetFqdns: [
+              #disable-next-line no-hardcoded-env-urls
+              'login.microsoftonline.com'
+            ]
+          }
         ]
       }
     ]

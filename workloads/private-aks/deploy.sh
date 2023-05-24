@@ -74,7 +74,7 @@ echo $workload_kubelet_identity_object_id
 
 az aks get-versions -l $location -o table
 
-workload_aks_server_json=$(az aks create -g $resource_group_name -n $workload_aks_name \
+workload_aks_json=$(az aks create -g $resource_group_name -n $workload_aks_name \
  --tier standard \
  --max-pods 50 --network-plugin azure \
  --node-count 1 --enable-cluster-autoscaler --min-count 1 --max-count 4 \
@@ -97,4 +97,10 @@ workload_aks_server_json=$(az aks create -g $resource_group_name -n $workload_ak
  --assign-kubelet-identity $workload_kubelet_identity_id \
  -o json)
 
-echo $workload_aks_server_json
+echo $workload_aks_json
+
+
+# Flow limits and active connections recommendations
+# https://learn.microsoft.com/en-us/azure/virtual-network/virtual-machine-network-throughput#network-flow-limits
+
+az group delete --name $resource_group_name -y
