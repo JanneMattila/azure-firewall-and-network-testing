@@ -156,6 +156,14 @@ $query = "AZFWApplicationRule
 | where TimeGenerated > ago(1h) and SourceIp startswith '10.10.' and Action == 'Deny'
 | summarize count() by Protocol, DestinationPort, Fqdn"
 
+$query = "AZFWApplicationRule
+| where TimeGenerated > ago(1h) and Action == 'Allow'
+| summarize count() by Protocol, DestinationPort, Fqdn"
+
+$query = "AZFWApplicationRule
+| where TimeGenerated > ago(1h) and Action == 'Deny'
+| summarize count() by Protocol, DestinationPort, Fqdn"
+
 $query
 
 $workspace = Get-AzOperationalInsightsWorkspace -Name $WorkspaceName -ResourceGroupName $resourceGroupName

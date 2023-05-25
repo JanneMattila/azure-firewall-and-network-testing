@@ -54,7 +54,7 @@ resource ruleCollectionGroup 'Microsoft.Network/firewallPolicies/ruleCollectionG
             ]
             targetFqdns: [
               'crazfwdemo000010.azurecr.io'
-              '*.crazfwdemo000010.azurecr.io'
+              'crazfwdemo000010.northeurope.data.azurecr.io'
             ]
           }
         ]
