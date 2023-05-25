@@ -91,6 +91,8 @@ resource virtualNetwork 'Microsoft.Network/virtualNetworks@2022-11-01' = {
           networkSecurityGroup: {
             id: networkSecurityGroup.id
           }
+          privateEndpointNetworkPolicies: 'Enabled'
+          privateLinkServiceNetworkPolicies: 'Enabled'
         }
       }
       {
@@ -100,6 +102,8 @@ resource virtualNetwork 'Microsoft.Network/virtualNetworks@2022-11-01' = {
           routeTable: {
             id: spokeRouteTable.id
           }
+          privateEndpointNetworkPolicies: 'Enabled'
+          privateLinkServiceNetworkPolicies: 'Enabled'
         }
       }
       {
@@ -109,6 +113,8 @@ resource virtualNetwork 'Microsoft.Network/virtualNetworks@2022-11-01' = {
           routeTable: {
             id: spokeRouteTable.id
           }
+          privateEndpointNetworkPolicies: 'Enabled'
+          privateLinkServiceNetworkPolicies: 'Enabled'
         }
       }
     ]

@@ -147,6 +147,7 @@ exit
 ######################
 
 $WorkspaceName = "log-firewall"
+$workspace = Get-AzOperationalInsightsWorkspace -Name $WorkspaceName -ResourceGroupName $resourceGroupName
 
 $query = "AZFWApplicationRule
 | where TimeGenerated > ago(1h) and SourceIp startswith '10.10.' and Action == 'Allow'
@@ -157,7 +158,7 @@ $query = "AZFWApplicationRule
 | summarize count() by Protocol, DestinationPort, Fqdn"
 
 $query = "AZFWApplicationRule
-| where TimeGenerated > ago(1h) and Action == 'Allow'
+| where TimeGenerated > ago(4h) and Action == 'Allow'
 | summarize count() by Protocol, DestinationPort, Fqdn"
 
 $query = "AZFWApplicationRule
@@ -165,9 +166,6 @@ $query = "AZFWApplicationRule
 | summarize count() by Protocol, DestinationPort, Fqdn"
 
 $query
-
-$workspace = Get-AzOperationalInsightsWorkspace -Name $WorkspaceName -ResourceGroupName $resourceGroupName
-
 $queryResult = Invoke-AzOperationalInsightsQuery -Workspace $workspace -Query $query
 $queryResult.Results | Format-Table
 

@@ -163,7 +163,27 @@ aci_json=$(az container create \
   -o json)
 
 # 2. Scope maps and tokens
-# TBA
+az acr scope-map create --name developers --registry $acr_name \
+  --repository apps \
+  content/write content/read \
+  --description "Developer access to apps repository"
+developer_token_json=$(az acr token create --name developertoken1 --registry $acr_name --scope-map developers -o json)
+developer_token_password=$(echo $developer_token_json | jq -r '.credentials.passwords[0].value')
+
+aci_json=$(az container create \
+  --name $aci_name \
+  --image "$acr_loginServer/apps/jannemattila/$image" \
+  --registry-login-server $acr_loginServer \
+  --registry-username developertoken1 \
+  --registry-password "$developer_token_password" \
+  --ports 80 \
+  --cpu 1 \
+  --memory 1 \
+  --resource-group $resource_group_name \
+  --restart-policy Always \
+  --ip-address Private \
+  --subnet $aci_subnet_id \
+  -o json)
 
 # 3. Admin credentials
 az acr update -n $acr_name --admin-enabled true

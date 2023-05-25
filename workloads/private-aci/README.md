@@ -28,3 +28,7 @@ Message: The image 'crazfwdemo000010.azurecr.io/apps/webapp-network-tester:1.0.5
   ]
 }
 ```
+
+## Links
+
+[Allow trusted services to securely access a network-restricted container registry](https://learn.microsoft.com/en-us/azure/container-registry/allow-access-trusted-services)
