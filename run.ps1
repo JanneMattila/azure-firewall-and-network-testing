@@ -149,9 +149,15 @@ exit
 $WorkspaceName = "log-firewall"
 
 $query = "AZFWApplicationRule
-| where SourceIp startswith '10.10.'
+| where TimeGenerated > ago(1h) and SourceIp startswith '10.10.' and Action == 'Allow'
 | summarize count() by Protocol, DestinationPort, Fqdn"
+
+$query = "AZFWApplicationRule
+| where TimeGenerated > ago(1h) and SourceIp startswith '10.10.' and Action == 'Deny'
+| summarize count() by Protocol, DestinationPort, Fqdn"
+
 $query
+
 $workspace = Get-AzOperationalInsightsWorkspace -Name $WorkspaceName -ResourceGroupName $resourceGroupName
 
 $queryResult = Invoke-AzOperationalInsightsQuery -Workspace $workspace -Query $query
@@ -176,6 +182,14 @@ New-AzResourceGroupDeployment `
     -DeploymentName "AKS-$((Get-Date).ToString("yyyy-MM-dd-HH-mm-ss"))" `
     -ResourceGroupName $resourceGroupName `
     -TemplateFile .\workloads\private-aks\firewall-policy.bicep `
+    -Force `
+    -Verbose
+
+# Private Azure Container Instances (ACI) rule deployment
+New-AzResourceGroupDeployment `
+    -DeploymentName "ACI-$((Get-Date).ToString("yyyy-MM-dd-HH-mm-ss"))" `
+    -ResourceGroupName $resourceGroupName `
+    -TemplateFile .\workloads\private-aci\firewall-policy.bicep `
     -Force `
     -Verbose
 

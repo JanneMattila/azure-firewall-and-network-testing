@@ -40,7 +40,7 @@ location="northeurope"
 # | |   | '__/ _ \/ _` | __/ _ \
 # | |___| | |  __/ (_| | ||  __/
 #  \____|_|  \___|\__,_|\__\___|
-# Create workload AKS
+# Create workload Private AKS
 #################################
 
 az group create -l $location -n $resource_group_name -o table
@@ -99,6 +99,27 @@ workload_aks_json=$(az aks create -g $resource_group_name -n $workload_aks_name 
 
 echo $workload_aks_json
 
+#######################
+# __   ___ __ ___  
+# \ \ / / '_ ` _ \ 
+#  \ V /| | | | | |
+#   \_/ |_| |_| |_|
+# inside management VM 
+#######################
+
+# Install Azure CLI
+curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+az login --tenant 8a35e8cd-119a-4446-b762-5002cf925b1d -o none
+
+az account show
+
+sudo az aks install-cli
+
+az aks get-credentials -n $workload_aks_name -g $resource_group_name --overwrite-existing
+
+kubelogin convert-kubeconfig -l azurecli
+
+kubectl get nodes
 
 # Flow limits and active connections recommendations
 # https://learn.microsoft.com/en-us/azure/virtual-network/virtual-machine-network-throughput#network-flow-limits
