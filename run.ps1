@@ -191,14 +191,6 @@ New-AzResourceGroupDeployment `
     -Force `
     -Verbose
 
-# Private Azure Container Instances (ACI) rule deployment
-New-AzResourceGroupDeployment `
-    -DeploymentName "ACI-$((Get-Date).ToString("yyyy-MM-dd-HH-mm-ss"))" `
-    -ResourceGroupName $resourceGroupName `
-    -TemplateFile .\workloads\private-aci\firewall-policy.bicep `
-    -Force `
-    -Verbose
-
 ##################################
 #   ____ _
 #  / ___| | ___  __ _ _ __
