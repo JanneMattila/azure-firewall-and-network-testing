@@ -14,6 +14,11 @@ It means that `Allow trusted Microsoft services to access this container registr
 
 [Allow trusted services to securely access a network-restricted container registry](https://learn.microsoft.com/en-us/azure/container-registry/allow-access-trusted-services)
 
+> Several multi-tenant Azure services operate from networks that can't be included in these registry network settings,
+> preventing them from performing operations such as pull or push images to the registry. 
+> By designating certain service instances as "trusted", a registry owner can allow select 
+> Azure resources to securely bypass the registry's network settings to perform registry operations.
+
 From [Trusted Services](https://learn.microsoft.com/en-us/azure/container-registry/allow-access-trusted-services#trusted-services):
 
 > Instances of the following services can access a network-restricted container registry
