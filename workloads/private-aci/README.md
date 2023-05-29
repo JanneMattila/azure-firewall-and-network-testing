@@ -1,8 +1,8 @@
 # Private ACI
 
-# InaccessibleImage
+# Inaccessible Image from Private ACR
 
-If you try to deploy ACI and get following error:
+If you try to deploy ACI and get following error when pulling the image from private ACR:
 
 ```
 ERROR: (InaccessibleImage) The image 'crazfwdemo000010.azurecr.io/apps/jannemattila/webapp-network-tester:1.0.56' in container group 'ci-workload' is not accessible. Please check the image and registry credential.
@@ -10,7 +10,7 @@ Code: InaccessibleImage
 Message: The image 'crazfwdemo000010.azurecr.io/apps/jannemattila/webapp-network-tester:1.0.56' in container group 'ci-workload' is not accessible. Please check the image and registry credential.
 ```
 
-It means that `Allow trusted Microsoft services to access this container registry` is not enabled for that container registry.
+It means that `Allow trusted Microsoft services to access this container registry` is not enabled for that container registry ([link](https://learn.microsoft.com/en-us/azure/container-instances/using-azure-container-registry-mi#configure-registry-authentication)).
 
 [Allow trusted services to securely access a network-restricted container registry](https://learn.microsoft.com/en-us/azure/container-registry/allow-access-trusted-services)
 
