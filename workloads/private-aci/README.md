@@ -18,3 +18,6 @@ From [Trusted Services](https://learn.microsoft.com/en-us/azure/container-regist
 
 > Instances of the following services can access a network-restricted container registry
 > if the registry's allow trusted services setting is enabled (the default)
+
+After image is successfully pulled and ACI is running, then User Defined Routes (UDR)
+and Network Security Groups (NSG) can be used for controlling the traffic from the ACI.
