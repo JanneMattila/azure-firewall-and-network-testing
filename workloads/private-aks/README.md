@@ -9,10 +9,10 @@
 > [Outbound rules](https://learn.microsoft.com/en-us/azure/aks/outbound-rules-control-egress)
 
 This below document tries to explain various problems that you might see 
-if you don't have the required connectivity from the AKS cluster to the internet.
+if you don't have the required connectivity from the AKS cluster to the required targets.
 
 If you see *any of the below problems*, then you need to double check that
-you have the required connectivity from the AKS cluster to the internet as documented in the above link.
+you have the required connectivity from the AKS cluster to the required targets as documented in the above link.
 
 ## No connectivity
 
