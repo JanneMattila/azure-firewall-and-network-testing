@@ -1,6 +1,18 @@
 # Private AKS
 
-[Azure Global required FQDN / application rules](https://learn.microsoft.com/en-us/azure/aks/outbound-rules-control-egress#azure-global-required-fqdn--application-rules)
+> **Warning**
+> If you plan to deploy AKS into environment which has route `0.0.0.0/0` to your
+> firewall, then you *must* make the required firewall openings before deploying AKS.
+> **Otherwise AKS deployment will fail**.
+> 
+> Follow these instruction for the required openings:
+> [Outbound rules](https://learn.microsoft.com/en-us/azure/aks/outbound-rules-control-egress
+
+This below document tries to explain various problems that you might see 
+if you don't have the required connectivity from the AKS cluster to the internet.
+
+If you see any of the below problems, then you need to make sure that you have
+the required connectivity from the AKS cluster to the internet as documented in the above link.
 
 ## No connectivity
 
