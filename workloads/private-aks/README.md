@@ -14,6 +14,14 @@ if you don't have the required connectivity from the AKS cluster to the required
 If you see *any of the below problems*, then you need to double check that
 you have the required connectivity from the AKS cluster to the required targets as documented in the above link.
 
+You can test the connectivity requirements from virtual machine in same virtual network:
+
+```bash
+curl -L https://raw.githubusercontent.com/JanneMattila/network-test-scripts/main/aks.sh | bash -s -- northeurope
+```
+
+Script can be found from [JanneMattila/network-test-scripts](https://github.com/JanneMattila/network-test-scripts).
+
 ## No connectivity
 
 User Defined Route (UDR) implemented in AKS subnet to route all traffic to Azure Firewall in a hub VNET.

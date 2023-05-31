@@ -23,6 +23,7 @@ tree
 $username = "jumpboxuser"
 $plainTextPassword = (New-Guid).ToString() + (New-Guid).ToString().ToUpper()
 $plainTextPassword
+$plainTextPassword >> .env # Save password to .env file
 $password = ConvertTo-SecureString -String $plainTextPassword -AsPlainText
 $resourceGroupName = "rg-azure-firewall-and-network-testing"
 
