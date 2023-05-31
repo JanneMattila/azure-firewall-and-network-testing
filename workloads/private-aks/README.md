@@ -11,8 +11,8 @@
 This below document tries to explain various problems that you might see 
 if you don't have the required connectivity from the AKS cluster to the internet.
 
-If you see any of the below problems, then you need to make sure that you have
-the required connectivity from the AKS cluster to the internet as documented in the above link.
+If you see *any of the below problems*, then you need to double check that
+you have the required connectivity from the AKS cluster to the internet as documented in the above link.
 
 ## No connectivity
 
