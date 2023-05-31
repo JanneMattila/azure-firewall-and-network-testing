@@ -6,7 +6,7 @@
 > **Otherwise AKS deployment will fail**.
 > 
 > Follow these instruction for the required openings:
-> [Outbound rules](https://learn.microsoft.com/en-us/azure/aks/outbound-rules-control-egress
+> [Outbound rules](https://learn.microsoft.com/en-us/azure/aks/outbound-rules-control-egress)
 
 This below document tries to explain various problems that you might see 
 if you don't have the required connectivity from the AKS cluster to the internet.
