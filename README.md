@@ -7,6 +7,9 @@ Azure Firewall and network testing enables you quickly deploy following environm
 You can use this infrastructure to test networking requirements of different
 Azure Services and helps you in your firewall rule development.
 
+These repo is closely related to [JanneMattila/azure-firewall-demo](https://github.com/JanneMattila/azure-firewall-demo)
+which is example implementation of Azure Firewall setup.
+
 ## Example workload deployments
 
 [Private AKS](./workloads/private-aks)
