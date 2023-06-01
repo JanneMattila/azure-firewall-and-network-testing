@@ -26,7 +26,7 @@ Script can be found from [JanneMattila/network-test-scripts](https://github.com/
 
 User Defined Route (UDR) implemented in AKS subnet to route all traffic to Azure Firewall in a hub VNET.
 
-Here is example error message if require connectivity is not configured:
+Here is example error message if required connectivity is not enabled:
 
 ```bash
 ERROR: (CreateVMSSAgentPoolFailed) Unable to establish outbound connection from agents, 
