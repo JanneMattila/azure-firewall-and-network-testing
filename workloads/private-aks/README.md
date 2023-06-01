@@ -218,3 +218,16 @@ The following is the Application Rule that is required to allow Azure Active Dir
 | Protocol | DestinationPort | Fqdn                 | count_ |
 | -------- | --------------- | -------------------- | ------ |
 | HTTPS    | 443             | registry-1.docker.io | 1      |
+
+```text
+app-fs-tester:1.1.13": failed to copy: httpReadSeeker: failed open: failed to do request: Get "https://production.cloudflare.docker.com/registry-v2/docker/registry/v2/blobs/sha256/66/667d055e2e09c1a11c7e0e781724a725a8517c6d8df497cbd92eeabf6773610c/data?verify=1685620861-NOkkB9Md%2FTxBMx4WPNnEe15Ikj8%3D": EOF
+  Normal   BackOff    23s                kubelet            Back-off pulling image "jannemattila/webapp-fs-tester:1.1.13"
+  Warning  Failed     23s                kubelet            Error: ImagePullBackOff
+  Normal   Pulling    10s (x2 over 25s)  kubelet            Pulling image "jannemattila/webapp-fs-tester:1.1.13"
+  Warning  Failed     8s (x2 over 23s)   kubelet            Error: ErrImagePull
+  Warning  Failed     8s                 kubelet            Failed to pull image "jannemattila/webapp-fs-tester:1.1.13": rpc error: code = Unknown desc = failed to pull and unpack image "docker.io/jannemattila/webapp-fs-tester:1.1.13": failed to copy: httpReadSeeker: failed open: failed to do request: Get "https://production.cloudflare.docker.com/registry-v2/docker/registry/v2/blobs/sha256/66/667d055e2e09c1a11c7e0e781724a725a8517c6d8df497cbd92eeabf6773610c/data?verify=1685620876-SiUjFysV6BA5NJRDy8eulMNiaUA%3D": EOF
+```
+
+| Protocol | DestinationPort | Fqdn                             | count_ |
+| -------- | --------------- | -------------------------------- | ------ |
+| HTTPS    | 443             | production.cloudflare.docker.com | 7      |

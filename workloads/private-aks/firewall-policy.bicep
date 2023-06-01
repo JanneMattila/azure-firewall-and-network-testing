@@ -324,6 +324,7 @@ resource ruleCollectionGroup 'Microsoft.Network/firewallPolicies/ruleCollectionG
             ]
             targetFqdns: [
               '*.docker.io'
+              'production.cloudflare.docker.com'
             ]
           }
         ]
