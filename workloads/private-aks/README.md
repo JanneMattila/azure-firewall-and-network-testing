@@ -17,7 +17,7 @@ you have the required connectivity from the AKS cluster to the required targets 
 You can test the connectivity requirements from virtual machine in same virtual network:
 
 ```bash
-curl -L https://raw.githubusercontent.com/JanneMattila/network-test-scripts/main/aks.sh | bash -s -- northeurope
+curl -L https://raw.githubusercontent.com/JanneMattila/network-test-scripts/main/aks.sh | bash -s -- westeurope
 ```
 
 Script can be found from [JanneMattila/network-test-scripts](https://github.com/JanneMattila/network-test-scripts).
@@ -204,3 +204,11 @@ The following is the Application Rule that is required to allow Azure Active Dir
   ]
 }
 ```
+
+## After the changes
+
+| Protocol | DestinationPort | Fqdn                                           | count_ |
+| -------- | --------------- | ---------------------------------------------- | ------ |
+| HTTPS    | 443             | motd.ubuntu.com                                | 1      |
+| HTTPS    | 443             | esm.ubuntu.com                                 | 2      |
+| HTTPS    | 443             | md-hdd-b4rzwnpfspxt.z38.blob.storage.azure.net | 2      |

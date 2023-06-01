@@ -170,6 +170,10 @@ $query
 $queryResult = Invoke-AzOperationalInsightsQuery -Workspace $workspace -Query $query
 $queryResult.Results | Format-Table
 
+# To get in markdown format
+# Install-Module FormatMarkdownTable
+$queryResult.Results | Format-MarkdownTableTableStyle Count, DestinationPort, Fqdn, Protocol
+
 ##################################################################################
 #     _         _______        __ __        __         _    _                 _
 #    / \    ___|  ___\ \      / / \ \      / /__  _ __| | _| | ___   __ _  __| |
