@@ -107,6 +107,9 @@ echo $workload_aks_json
 # inside management VM 
 #######################
 
+workload_aks_name="aks-workload"
+resource_group_name="rg-azure-firewall-and-network-testing-workloads"
+
 # Install Azure CLI
 curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
 az login --tenant 8a35e8cd-119a-4446-b762-5002cf925b1d -o none
@@ -120,6 +123,26 @@ az aks get-credentials -n $workload_aks_name -g $resource_group_name --overwrite
 kubelogin convert-kubeconfig -l azurecli
 
 kubectl get nodes
+
+git clone https://github.com/JanneMattila/aks-workshop.git
+cd aks-workshop
+
+ls -lF
+
+kubectl apply -f network-app
+
+kubectl apply -f storage-app/00-namespace.yaml
+kubectl apply -f storage-app/03-service.yaml
+kubectl apply -f storage-app/10-azuredisk-sc.yaml
+kubectl apply -f storage-app/11-persistent-volume-claim-disk.yaml
+kubectl apply -f storage-app/12-statefulset.yaml
+
+kubectl get pvc -n storage-app
+kubectl describe pvc premiumdisk-pvc -n storage-app
+kubectl describe pvc premiumdisk-storage-app-deployment-0 -n storage-app
+kubectl get pv -n storage-app
+kubectl get pods -n storage-app
+kubectl describe pods -n storage-app
 
 # Flow limits and active connections recommendations
 # https://learn.microsoft.com/en-us/azure/virtual-network/virtual-machine-network-throughput#network-flow-limits

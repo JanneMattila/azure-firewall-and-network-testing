@@ -212,3 +212,9 @@ The following is the Application Rule that is required to allow Azure Active Dir
 | HTTPS    | 443             | motd.ubuntu.com                                | 1      |
 | HTTPS    | 443             | esm.ubuntu.com                                 | 2      |
 | HTTPS    | 443             | md-hdd-b4rzwnpfspxt.z38.blob.storage.azure.net | 2      |
+
+## After pulling image from Docker Hub
+
+| Protocol | DestinationPort | Fqdn                 | count_ |
+| -------- | --------------- | -------------------- | ------ |
+| HTTPS    | 443             | registry-1.docker.io | 1      |

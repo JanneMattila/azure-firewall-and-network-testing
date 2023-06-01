@@ -309,6 +309,23 @@ resource ruleCollectionGroup 'Microsoft.Network/firewallPolicies/ruleCollectionG
               'marketplaceapi.microsoft.com'
             ]
           }
+          {
+            ruleType: 'ApplicationRule'
+            name: 'Allow container images from Docker Hub'
+            description: 'Docker Images are fetched from address which look like this: registry-1.docker.io'
+            sourceAddresses: [
+              '*'
+            ]
+            protocols: [
+              {
+                port: 443
+                protocolType: 'Https'
+              }
+            ]
+            targetFqdns: [
+              '*.docker.io'
+            ]
+          }
         ]
       }
     ]
