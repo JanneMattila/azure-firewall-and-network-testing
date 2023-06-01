@@ -231,3 +231,78 @@ app-fs-tester:1.1.13": failed to copy: httpReadSeeker: failed open: failed to do
 | Protocol | DestinationPort | Fqdn                             | count_ |
 | -------- | --------------- | -------------------------------- | ------ |
 | HTTPS    | 443             | production.cloudflare.docker.com | 7      |
+
+## Misc
+
+Azure Disk and example `pv` and `pvc` and `sc`:
+
+```bash
+jumpboxuser@jumpbox:~/aks-workshop$ kubectl describe pvc premiumdisk2-storage-app-deployment-0 -n storage-app
+Name:          premiumdisk2-storage-app-deployment-0
+Namespace:     storage-app
+StorageClass:  managed-csi-premium-sc
+Status:        Bound
+Volume:        pvc-136375d5-5816-45ce-a77b-4755ce386eae
+Labels:        app=storage-app
+Annotations:   pv.kubernetes.io/bind-completed: yes
+               pv.kubernetes.io/bound-by-controller: yes
+               volume.beta.kubernetes.io/storage-provisioner: disk.csi.azure.com
+               volume.kubernetes.io/selected-node: aks-nodepool1-17475938-vmss000000
+               volume.kubernetes.io/storage-provisioner: disk.csi.azure.com
+Finalizers:    [kubernetes.io/pvc-protection]
+Capacity:      5Gi
+Access Modes:  RWO
+VolumeMode:    Filesystem
+Used By:       storage-app-deployment-0
+Events:
+  Type    Reason                 Age                 From                                                                                               Message        
+  ----    ------                 ----                ----                                                                                               -------        
+  Normal  WaitForFirstConsumer   22m (x12 over 25m)  persistentvolume-controller                                                                        waiting for first consumer to be created before binding
+  Normal  ExternalProvisioning   22m                 persistentvolume-controller                                                                        waiting for a volume to be created, either by external provisioner "disk.csi.azure.com" or manually created by system administrator
+  Normal  Provisioning           22m                 disk.csi.azure.com_csi-azuredisk-controller-67fc899bdc-p8lw9_971d59f6-f403-442f-9adc-92691a50548a  External provisioner is provisioning volume for claim "storage-app/premiumdisk2-storage-app-deployment-0"
+  Normal  ProvisioningSucceeded  22m                 disk.csi.azure.com_csi-azuredisk-controller-67fc899bdc-p8lw9_971d59f6-f403-442f-9adc-92691a50548a  Successfully provisioned volume pvc-136375d5-5816-45ce-a77b-4755ce386eae
+jumpboxuser@jumpbox:~/aks-workshop$ kubectl describe pv pvc-136375d5-5816-45ce-a77b-4755ce386eae -n storage-app
+Name:              pvc-136375d5-5816-45ce-a77b-4755ce386eae
+Labels:            <none>
+Annotations:       pv.kubernetes.io/provisioned-by: disk.csi.azure.com
+                   volume.kubernetes.io/provisioner-deletion-secret-name:
+                   volume.kubernetes.io/provisioner-deletion-secret-namespace:
+Finalizers:        [kubernetes.io/pv-protection external-attacher/disk-csi-azure-com]
+StorageClass:      managed-csi-premium-sc
+Status:            Bound
+Claim:             storage-app/premiumdisk2-storage-app-deployment-0
+Reclaim Policy:    Delete
+Access Modes:      RWO
+VolumeMode:        Filesystem
+Capacity:          5Gi
+Node Affinity:
+  Required Terms:
+    Term 0:        topology.disk.csi.azure.com/zone in []
+Message:
+Source:
+    Type:              CSI (a Container Storage Interface (CSI) volume source)
+    Driver:            disk.csi.azure.com
+    FSType:
+    VolumeHandle:      /subscriptions/59a94869-414f-4a04-9aca-2370777500ef/resourceGroups/mc_rg-azure-firewall-and-network-testing-workloads_aks-workload_northeurope/providers/Microsoft.Compute/disks/pvc-136375d5-5816-45ce-a77b-4755ce386eae
+    ReadOnly:          false
+    VolumeAttributes:      csi.storage.k8s.io/pv/name=pvc-136375d5-5816-45ce-a77b-4755ce386eae
+                           csi.storage.k8s.io/pvc/name=premiumdisk2-storage-app-deployment-0
+                           csi.storage.k8s.io/pvc/namespace=storage-app
+                           requestedsizegib=5
+                           skuName=Premium_LRS
+                           storage.kubernetes.io/csiProvisionerIdentity=1685594781122-4892-disk.csi.azure.com
+Events:                <none>
+jumpboxuser@jumpbox:~/aks-workshop$ kubectl describe sc managed-csi-premium-sc
+Name:            managed-csi-premium-sc
+IsDefaultClass:  No
+Annotations:     kubectl.kubernetes.io/last-applied-configuration={"allowVolumeExpansion":true,"apiVersion":"storage.k8s.io/v1","kind":"StorageClass","metadata":{"annotations":{},"name":"managed-csi-premium-sc"},"parameters":{"skuName":"Premium_LRS"},"provisioner":"disk.csi.azure.com","reclaimPolicy":"Delete","volumeBindingMode":"WaitForFirstConsumer"}
+
+Provisioner:           disk.csi.azure.com
+Parameters:            skuName=Premium_LRS
+AllowVolumeExpansion:  True
+MountOptions:          <none>
+ReclaimPolicy:         Delete
+VolumeBindingMode:     WaitForFirstConsumer
+Events:                <none>
+jumpboxuser@jumpbox:~/aks-workshop$
+```
