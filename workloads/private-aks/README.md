@@ -174,7 +174,7 @@ The following is the Application Rule that is required to access monitoring and 
 
 ## Azure AD endpoint allowed
 
-Here is example error message if require connectivity is not configured:
+Here is example error message if required connectivity is not configured:
 
 ```
 ERROR: No matches in graph database for '2462d71f-4662-4db3-aabd-4290431551ed'
